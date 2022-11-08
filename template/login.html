@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<!-- <div class="container"> -->
+    <form method="POST">
+        <h3 class="text-white" align="center">MEMBER LOGIN</h1>
+            <div class="from-group">
+                <label class="text-white" for="firstName">Name</label>
+                <input type="text" class="form-control" id="firstName" name="firstName" placeholder="Enter name">
+            </div>
+        <br>
+        <div class="from-group">
+            <label class="text-white" for="password1">Password</label>
+            <input type="password" class="form-control" id="password1" name="password1" placeholder="Enter password">
+        </div>
+        <br>
+        <div>
+            <a class="text-white btn btn-outline-secondary" href="/signUp">Create you account</a>
+            <br>
+            <button type="submit" class="text-white btn btn-outline-secondary">Login</button>
+        </div>
+        <!-- <div class="msg">{{ msg }}</div> -->
+    </form>
+</div>
+
+
+{% endblock %}
