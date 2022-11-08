@@ -59,7 +59,7 @@ def login():
             # Create session data, we can access this data in other routes
             session['loggedin'] = True
             session['customer_id'] = account['customer_id']
-            session['firstName'] = account['name']
+            session['name'] = account['name']
             session['email'] = account['email']
             session['phone'] = account['phone']
             session['address'] = account['address']
@@ -77,17 +77,17 @@ def login():
 def signUp():
     if request.method == 'POST':
         email = request.form.get('email')
-        firstName = request.form.get('firstName')
-        phoneNum = request.form.get('phone')
+        name = request.form.get('firstName')
+        phone = request.form.get('phone')
         address = request.form.get('address')
         password1 = request.form.get('password1')
         password2 = request.form.get('password2')
 
         if len(email) < 4:
             flash('Email must be grater than 4 characters.', category='error')
-        elif len(firstName) < 2:
+        elif len(name) < 2:
             flash('First name must be grater than 1 characters.', category='error')
-        elif len(phoneNum) != 8:
+        elif len(phone) != 8:
             flash('Phone number have to be 5 number.', category='error')
         elif password1 != password2:
             flash('Password don\'s match.', category='error')
@@ -95,7 +95,9 @@ def signUp():
             flash('Password must be at least 6 characters.', category='error')
         else:
             # cur = db.cursor()
-            cur.execute("INSERT INTO customers (name, email, phone_num, address, password1, password2) VALUES ('%s', '%s', %s, '%s', '%s', '%s')", (firstName, email, phoneNum, address, password1, password2))
+            cur.execute("INSERT INTO customers VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}')".format(name, email, phone, address, password1, password2))
+            # cur.execute("INSERT INTO customers (name, email, phone_num, address, password1, password2) VALUES ('%s', '%s', %s, '%s', '%s', '%s')", \
+            #     (name, email, phone, address, password1, password2))
 
             try:
                 cur.execute('commit')
