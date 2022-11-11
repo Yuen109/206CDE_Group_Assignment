@@ -24,18 +24,7 @@ def menu():
 
 @app.route('/login/profile/', methods=['GET', 'Post'])
 def profile():
-    # db.ping(reconnect=True)
-    cur.execute(f"SELECT * FROM customers WHERE name = '{firstName}' AND password1 = '{password1}'")
-    account = request.form.to_dict()
-    # Fetch one record and return result
-    account = cur.fetchone()
-    for row in account:
-        customer_id = list(row.values())[0]
-        firstName = list(row.values())[0]
-        session['customer_id'] = customer_id
-        session['firstName'] = firstName
-        customer_id = session['customer_id']
-        firstName = session['firstName']
+    # db.ping(reconnect=True)    
     # Check if user is loggedin
     if 'loggedin' in session:
     #     We need all the account info for the user so we can display it on the profile page
@@ -69,6 +58,13 @@ def login():
         # If account exists in accounts table in out database
         if account:
             # Create session data, we can access this data in other routes
+            # for row in account:
+            #     customer_id = list(row.values())[0]
+            #     firstName = list(row.values())[2]
+            #     session['customer_id'] = customer_id
+            #     session['firstName'] = firstName
+            #     customer_id = session['customer_id']
+            #     firstName = session['firstName']
             session['loggedin'] = True
             session['customer_id'] = request.form.get('customer_id')
             session['firstName'] = request.form.get('firstName')
