@@ -3,9 +3,10 @@
 
 {% block content %}
 
-<h1 class="text-white">welcom to Pizza Hut</h1>
+<h1 class="text-white">welcom {{ session.firstName }} to Pizza Hut</h1>
+<br>
 <div class="position-relative">
-    <a class="position-absolute top-100 start-50 translate-middle btn btn btn-light" href="/menu">View all menu!</a>
+    <a class="position-absolute top-300 start-50 translate-middle btn btn btn-light" href="/menu">View all menu!</a>
 </div>
 
 {% endblock %}

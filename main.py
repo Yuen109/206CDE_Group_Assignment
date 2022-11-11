@@ -24,18 +24,29 @@ def menu():
 
 @app.route('/login/profile/', methods=['GET', 'Post'])
 def profile():
-    db.ping(reconnect=True)
+    # db.ping(reconnect=True)
+    cur.execute(f"SELECT * FROM customers WHERE name = '{firstName}' AND password1 = '{password1}'")
+    account = request.form.to_dict()
+    # Fetch one record and return result
+    account = cur.fetchone()
+    for row in account:
+        customer_id = list(row.values())[0]
+        firstName = list(row.values())[0]
+        session['customer_id'] = customer_id
+        session['firstName'] = firstName
+        customer_id = session['customer_id']
+        firstName = session['firstName']
     # Check if user is loggedin
     if 'loggedin' in session:
     #     We need all the account info for the user so we can display it on the profile page
-        cur = db.cursor(pymysql.cursors.DictCursor)
-        cur.execute('SELECT * FROM customers WHERE customer_id = %s', (session['id']))
+        # cur = db.cursor(pymysql.cursors.DictCursor)
+        cur.execute("SELECT * FROM customers WHERE customer_id = %s", (session['customer_id']))
         account = cur.fetchone()
 
     if 'loggedin' in session:
         # We need all the account info for the user so we can display it on the profile page
-        cur = db.cursor(pymysql.cursors.DictCursor)
-        cur.execute('SELECT * FROM products WHERE user_name = %s AND customer_id = %s', (session['firstName'], session['id']))
+        # cur = db.cursor(pymysql.cursors.DictCursor)
+        cur.execute("SELECT * FROM products WHERE user_name = %s AND customer_id = %s", (session['firstName'], session['customer_id']))
         profile = cur.fetchall()
 
         # Show the profile page with account info
@@ -47,24 +58,26 @@ def login():
     # Check if "username" and "password" POST requests exist (user submitted form)
     if request.method == 'POST' and 'firstName' in request.form and 'password1' in request.form:
         # Create variables for easy access
-        firstName = request.form['firstName']
-        password1 = request.form['password1']
+        firstName = request.form.get('firstName')
+        password1 = request.form.get('password1')
         # Check if account exists using MySQL
-        # cur = db.cursor(pymysql.cursors.DictCursor)
+        # cur = conection.cursor(cursors.DictCursor)
         cur.execute(f"SELECT * FROM customers WHERE name = '{firstName}' AND password1 = '{password1}'")
+        account = request.form.to_dict()
         # Fetch one record and return result
         account = cur.fetchone()
         # If account exists in accounts table in out database
         if account:
             # Create session data, we can access this data in other routes
             session['loggedin'] = True
-            session['customer_id'] = account['customer_id']
-            session['name'] = account['name']
-            session['email'] = account['email']
-            session['phone'] = account['phone']
-            session['address'] = account['address']
-            session['password1'] = account['password1']
-            session['password2'] = account['password2']
+            session['customer_id'] = request.form.get('customer_id')
+            session['firstName'] = request.form.get('firstName')
+            session['email'] = request.form.get('email')
+            session['phone'] = request.form.get('phone')
+            session['address'] = request.form.get('address')
+            session['password1'] = request.form.get('password1')
+            session['password2'] = request.form.get('password2')
+
             return redirect(url_for('menu'))
 
         else:
@@ -76,8 +89,9 @@ def login():
 @app.route("/signUp/", methods=['GET', 'POST'])
 def signUp():
     if request.method == 'POST':
+        customer_id = None
         email = request.form.get('email')
-        name = request.form.get('firstName')
+        firstName = request.form.get('firstName')
         phone = request.form.get('phone')
         address = request.form.get('address')
         password1 = request.form.get('password1')
@@ -85,7 +99,7 @@ def signUp():
 
         if len(email) < 4:
             flash('Email must be grater than 4 characters.', category='error')
-        elif len(name) < 2:
+        elif len(firstName) < 2:
             flash('First name must be grater than 1 characters.', category='error')
         elif len(phone) != 8:
             flash('Phone number have to be 5 number.', category='error')
@@ -94,10 +108,7 @@ def signUp():
         elif len(password1) < 6:
             flash('Password must be at least 6 characters.', category='error')
         else:
-            # cur = db.cursor()
-            cur.execute("INSERT INTO customers VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}')".format(name, email, phone, address, password1, password2))
-            # cur.execute("INSERT INTO customers (name, email, phone_num, address, password1, password2) VALUES ('%s', '%s', %s, '%s', '%s', '%s')", \
-            #     (name, email, phone, address, password1, password2))
+            cur.execute("INSERT INTO customers VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}')".format(customer_id, email, firstName, phone, address, password1, password2))
 
             try:
                 cur.execute('commit')
@@ -121,6 +132,14 @@ def logout():
    flash('You logout successfully!')
    # Redirect to login page
    return redirect(url_for('login'))
+
+
+def printOut():
+    cur.execute('select * from customers')
+    for row in cur.fetchall():
+        print(f'customer_id {row[0]} eamil {row[1]} name {row[2]} phone  {row[3]} address {row[4]} password1 {row[5]} password2 {row[5]}')
+
+# printOut()
 
 
 if __name__ == "__main__":
