@@ -14,7 +14,7 @@
         </div>
         <div class="card-footer">
             <!-- <small class="text-muted">Last updated 3 mins ago</small> -->
-            <small class="text-muted">${{ item.3 }}</small>
+            <small class="text-muted">$ {{ item.3 }}</small>
             {% if session.loggedin %}
             <a href="{{ url_for('menu', food_id = food_id) }}">
                 <button type="button" class="btn btn-outline-secondary">
