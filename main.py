@@ -24,7 +24,7 @@ def home():
 def menu():
     cur.execute("SELECT * FROM food")
     food = cur.fetchall()
-    print(food)
+
     # Pass food to the menu page 
     return render_template("menu.html", food = food)
 
