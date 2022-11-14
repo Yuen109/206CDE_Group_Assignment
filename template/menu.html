@@ -5,7 +5,7 @@
 
 <h1 class="text-white">welcom to menu page</h1>
 <br>
-<div class="card-group">
+<div class="card-group" style="width: 22rem;">
     {% for item in food %}
     <div class="card">
         <div class="card-body">
@@ -13,7 +13,6 @@
             <p class="card-text">{{ item.2 }}</p>
         </div>
         <div class="card-footer">
-            <!-- <small class="text-muted">Last updated 3 mins ago</small> -->
             <small class="text-muted">$ {{ item.3 }}</small>
             {% if session.loggedin %}
             <a href="{{ url_for('menu', food_id = food_id) }}">
@@ -27,4 +26,5 @@
         <img class="card-img-top" src="{{ url_for('static', filename='image/B5372.png.jpeg') }}" alt="Card image cap">
         {% endfor %}
     </div>
+</div>
 {% endblock %}
