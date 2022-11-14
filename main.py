@@ -89,7 +89,7 @@ def signUp():
         elif len(firstName) < 2:
             flash('First name must be grater than 1 characters.', category='error')
         elif len(phone) != 8:
-            flash('Phone number have to be 5 number.', category='error')
+            flash('Phone number have to be 8 numbers.', category='error')
         elif password1 != password2:
             flash('Password don\'s match.', category='error')
         elif len(password1) < 6:
