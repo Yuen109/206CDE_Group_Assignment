@@ -14,32 +14,20 @@ except cx_Oracle.DatabaseError as er:
 
 cur = conection.cursor()
 
+# This is the home page 
 @app.route("/", methods=['GET', 'POST'])
 def home():
     return render_template("home.html")
 
+# This is the menu page
 @app.route("/menu/", methods=['GET', 'POST'])
 def menu():
-    return render_template("menu.html")
+    cur.execute("SELECT * FROM food")
+    food = cur.fetchall()
+    print(food)
+    # Pass food to the menu page 
+    return render_template("menu.html", food = food)
 
-@app.route('/login/profile/', methods=['GET', 'Post'])
-def profile():
-    # db.ping(reconnect=True)    
-    # Check if user is loggedin
-    if 'loggedin' in session:
-    #     We need all the account info for the user so we can display it on the profile page
-        # cur = db.cursor(pymysql.cursors.DictCursor)
-        cur.execute("SELECT * FROM customers WHERE customer_id = %s", (session['customer_id']))
-        account = cur.fetchone()
-
-    if 'loggedin' in session:
-        # We need all the account info for the user so we can display it on the profile page
-        # cur = db.cursor(pymysql.cursors.DictCursor)
-        cur.execute("SELECT * FROM products WHERE user_name = %s AND customer_id = %s", (session['firstName'], session['customer_id']))
-        profile = cur.fetchall()
-
-        # Show the profile page with account info
-    return render_template('profile.html', account = account, profile = profile)
 
 @app.route('/login/', methods=['GET', 'POST'])
 def login():
@@ -54,25 +42,28 @@ def login():
         cur.execute(f"SELECT * FROM customers WHERE name = '{firstName}' AND password1 = '{password1}'")
         account = request.form.to_dict()
         # Fetch one record and return result
-        account = cur.fetchone()
+        account = cur.fetchall()
+
         # If account exists in accounts table in out database
         if account:
-            # Create session data, we can access this data in other routes
-            # for row in account:
-            #     customer_id = list(row.values())[0]
-            #     firstName = list(row.values())[2]
-            #     session['customer_id'] = customer_id
-            #     session['firstName'] = firstName
-            #     customer_id = session['customer_id']
-            #     firstName = session['firstName']
-            session['loggedin'] = True
-            session['customer_id'] = request.form.get('customer_id')
-            session['firstName'] = request.form.get('firstName')
-            session['email'] = request.form.get('email')
-            session['phone'] = request.form.get('phone')
-            session['address'] = request.form.get('address')
-            session['password1'] = request.form.get('password1')
-            session['password2'] = request.form.get('password2')
+        #     # Create session data, we can access this data in other routes
+            for row in account:
+                customer_id = list(row)[0]
+                firstName = list(row)[2]
+                session['customer_id'] = customer_id
+                session['firstName'] = firstName
+                customer_id = session['customer_id']
+                firstName = session['firstName']
+                session['loggedin'] = True
+
+                 
+            # session['customer_id'] = request.form.get('customer_id')
+            # session['firstName'] = request.form.get('firstName')
+            # session['email'] = request.form.get('email')
+            # session['phone'] = request.form.get('phone')
+            # session['address'] = request.form.get('address')
+            # session['password1'] = request.form.get('password1')
+            # session['password2'] = request.form.get('password2')
 
             return redirect(url_for('menu'))
 
@@ -126,7 +117,7 @@ def logout():
    session.pop('id', None)
    session.pop('username', None)
    flash('You logout successfully!')
-   # Redirect to login page
+#    Redirect to login page
    return redirect(url_for('login'))
 
 
