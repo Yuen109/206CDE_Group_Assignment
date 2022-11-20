@@ -23,7 +23,11 @@
                 </a>
                 {% endif%}              
             </div>
-            <img class="card-img-top" src="{{ url_for('static', filename='image/B5372.png.jpeg') }}" alt="Card image cap">
+            <div>
+                {% for imgs in img %}
+                <img class="card-img-top" src="{{ url_for('static', filename=imgs) }}" alt="Card image cap">
+                {% endfor %}
+            </div>
             {% endfor %}
         </div>
     </div>
