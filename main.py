@@ -24,20 +24,15 @@ def home():
 @app.route("/menu/", methods=['GET', 'POST'])
 def menu():
     cur.execute("SELECT * FROM food")
-    food = cur.fetchall()
     # Pass food to the menu page 
-    # assign directory
-    # directory = 'static/img'  
-    IMG_FOLDER = os.path.join('static', 'img')
+    food = cur.fetchall()
 
+    IMG_FOLDER = os.path.join('static', 'img')
     app.config['UPLOAD_FOLDER'] = IMG_FOLDER
-    # iterate over files in
-    # that directory
-    # for root, dirs, files in os.walk(directory):
-    #     for filename in files:
-    #         img = os.path.join(root, filename)
+
     IMG_LIST = os.listdir('static/img')
     IMG_LIST = ['img/' + i for i in IMG_LIST]
+
     return render_template("menu.html", food = food, img = IMG_LIST)
 
 
