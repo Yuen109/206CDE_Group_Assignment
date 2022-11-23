@@ -4,4 +4,4 @@
 
 2. Try to sign up an user
 
-3. Login to see the manu purchase icon
+3. Login to see the mnu purchase icon
