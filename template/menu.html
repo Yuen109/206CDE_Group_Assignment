@@ -2,34 +2,41 @@
 {% block title %}Main menu{% endblock %}
 
 {% block content %}
-
 <h1 class="text-white">welcom to menu page</h1>
 <br>
-<div class="row">
-    <div class="card-group" style="width: 25rem;">
-        {% for item in food %}
+<div class="container">
+    <!-- To loop out the card -->
+    <div class="card-group" style="width: 100%; gap: 20px;">
+        {% for item in food| batch(4) %}
         <div class="card">
+            {% for items in item %}
             <div class="card-body">
-                <h5 class="card-title">{{ item.1 }}</h5>
-                <p class="card-text">{{ item.2 }}</p>
+                <!-- Card title -->
+                <h5 class="card-title">{{ items.1 }}</h5>
+                <!-- card description -->
+                <p class="card-text" style="height: 60px;">{{ items.2 }}</p>
             </div>
-            <div class="card-footer">
-                <small class="text-muted">$ {{ item.3 }}</small>
+            <div class="card-footer" style="display: flex; align-items: center; justify-content: space-between;" >
+                <!-- Price -->
+                <small class="text-muted" >$ {{ items.3 }}</small>
                 {% if session.loggedin %}
-                <a href="{{ url_for('menu', food_id = food_id) }}">
-                    <button type="button" class="btn btn-outline-secondary">
+                <!-- Purchase button -->
+                <a href="{{ url_for('menu', food_id = food_id) }}" >
+                <button type="button" class="btn btn-outline-secondary">
                     Order
                 </button>
                 </a>
                 {% endif%}              
             </div>
             <div>
+                <!-- Display img -->
                 {% for imgs in img %}
                 <img class="card-img-top" src="{{ url_for('static', filename=imgs) }}" alt="Card image cap">
                 {% endfor %}
             </div>
             {% endfor %}
         </div>
+        {% endfor %}
     </div>
 </div>
 {% endblock %}

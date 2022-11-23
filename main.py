@@ -31,10 +31,22 @@ def menu():
     app.config['UPLOAD_FOLDER'] = IMG_FOLDER
 
     IMG_LIST = os.listdir('static/img')
-    IMG_LIST = ['img/' + i for i in IMG_LIST]
+    # IMG_LIST = ['img/' + i for i in IMG_LIST]
+
+    picList = []
+    for i in IMG_LIST:
+        IMG_LIST = ['img/' + i]
+
+        picList.append(i)
+    # print(picList)
 
     return render_template("menu.html", food = food, img = IMG_LIST)
 
+# pruchase item
+@app.route("/purchase/<int:product_id>", methods=['GET', 'POST'])
+def purchase(product_id):
+
+    return render_template("purchase.html")
 
 @app.route('/login/', methods=['GET', 'POST'])
 def login():
@@ -44,7 +56,6 @@ def login():
         # Create variables for easy access
         firstName = request.form.get('firstName')
         password1 = request.form.get('password1')
-        # Check if account exists using MySQL
         # cur = conection.cursor(cursors.DictCursor)
         cur.execute(f"SELECT * FROM customers WHERE name = '{firstName}' AND password1 = '{password1}'")
         account = request.form.to_dict()
