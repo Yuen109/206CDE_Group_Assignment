@@ -1,11 +1,33 @@
 {% extends "base.html" %}
-{% block title %}Main menu{% endblock %}
+{% block title %}Purchase Page{% endblock %}
 
 {% block content %}
 
-<h1 class="text-white">Buy ME</h1>
+<h1 class="text-white">Enter Address or Take Away</h1>
 <br>
-<div class="position-relative">
-    <a class="position-absolute top-300 start-50 translate-middle btn btn btn-light" href="/menu">View all menu!</a>
-</div>
+
+<form method="POST">
+    <div class="from-group">
+        <label class="text-white" for="Address_1">Address 1</label>
+        <input type="text" class="form-control" id="Address_1" name="Address_1" placeholder="Enter Address">
+    </div>
+    <br>
+    <div class="from-group">
+        <label class="text-white" for="Address_2">Address 2</label>
+        <input type="text" class="form-control" id="Address_2" name="Address_2" placeholder="Enter Address">
+    </div>
+    <br>
+    <div class="from-group">
+        <label class="text-white" for="Address_3">Address 3</label>
+        <input type="text" class="form-control" id="Address_3" name="Address_3" placeholder="Enter Address">
+    </div>
+
+    <br>
+    <div class="card-footer" style="display: flex; align-items: center; align-items: center; justify-content: space-around;">
+        <button type="submit" class="btn btn btn-light">Delivery</button>
+        <button type="submit" class="btn btn btn-light">Take Away</button>
+        <!-- <button type="submit" class="text-white btn btn-outline-secondary">Thank you</button> -->
+    </div>
+    <!-- <div class="msg">{{ msg }}</div> -->
+</form>
 {% endblock %}

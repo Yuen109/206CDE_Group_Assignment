@@ -33,20 +33,61 @@ def menu():
     IMG_LIST = os.listdir('static/img')
     # IMG_LIST = ['img/' + i for i in IMG_LIST]
 
-    picList = []
+    # picList = []
     for i in IMG_LIST:
         IMG_LIST = ['img/' + i]
 
-        picList.append(i)
+        # picList.append(i)
     # print(picList)
 
     return render_template("menu.html", food = food, img = IMG_LIST)
 
 # pruchase item
-@app.route("/purchase/<int:product_id>", methods=['GET', 'POST'])
-def purchase(product_id):
-
+@app.route("/purchase/", methods=['GET', 'POST'])
+def purchase():
+    if request.method == 'POST':
+        address = request.form.get('Address_1')
+        address_2 = request.form.get('Address_2')
+        address_3 = request.form.get('Address_3')
+        
+        if len(address) < 0:
+            flash('You must enter an address', category='error')
     return render_template("purchase.html")
+
+# creditCard 
+@app.route("/creditCard", methods=['GET', 'POST'])
+def creditCard():
+    if request.method == 'POST':
+        cardNumber = request.form.get('cardNumber')
+        Security_Code = request.form.get('Security_Code')
+        user_name = request.form.get('user_name')
+
+        if len(cardNumber) != 16:
+            flash('You must enter a 16 digit card number', category='error')
+        elif len(Security_Code) != 3:
+            flash('You must enter security code', category='error')
+        elif len(user_name) < 0:
+            flash('You must enter a user name', category='error')
+        else:
+            cur.execute("INSERT INTO creditCard VALUES ('{0}', '{1}', '{2}')".format(cardNumber, Security_Code, user_name))
+
+            try:
+                cur.execute('commit')
+                # print("Successfully inserted")
+                flash('Create successfully')
+                return redirect(url_for('thankYou'))
+            except:
+                cur.rollback()
+            
+            cur.close()
+
+    return render_template("creditCard.html")
+
+# thank you page 
+@app.route("/thankYou", methods=['GET', 'POST'])
+def thankYou():
+        
+    return render_template("thankYou.html")
 
 @app.route('/login/', methods=['GET', 'POST'])
 def login():
@@ -74,15 +115,6 @@ def login():
                 firstName = session['firstName']
                 session['loggedin'] = True
 
-                 
-            # session['customer_id'] = request.form.get('customer_id')
-            # session['firstName'] = request.form.get('firstName')
-            # session['email'] = request.form.get('email')
-            # session['phone'] = request.form.get('phone')
-            # session['address'] = request.form.get('address')
-            # session['password1'] = request.form.get('password1')
-            # session['password2'] = request.form.get('password2')
-
             return redirect(url_for('menu'))
 
         else:
@@ -107,7 +139,7 @@ def signUp():
         elif len(firstName) < 2:
             flash('First name must be grater than 1 characters.', category='error')
         elif len(phone) != 8:
-            flash('Phone number have to be 5 number.', category='error')
+            flash('Please only 8 digit valid phone number', category='error')
         elif password1 != password2:
             flash('Password don\'s match.', category='error')
         elif len(password1) < 6:

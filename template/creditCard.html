@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Credit Card Page{% endblock %}
+
+{% block content %}
+<h1 class="text-white" align="center">Enter You Credit Card</h1>
+<br>
+<form method="POST">
+    <div class="from-group">
+        <label class="text-white" for="cardNumber">Card Number</label>
+        <input type="text" class="form-control" id="cardNumber" name="cardNumber" placeholder="Enter Card Number">
+    </div>
+    <br>
+    <div class="from-group">
+        <label class="text-white" for="Security_Code">Security Code (CVV)</label>
+        <input type="text" class="form-control" id="Security_Code" name="Security_Code" placeholder="Three digit number on the back of your card">
+    </div>
+    <br>
+    <div class="from-group">
+        <label class="text-white" for="user_name">Your Name on the Card</label>
+        <input type="text" class="form-control" id="user_name" name="user_name" placeholder="Enter Your name">
+    </div>
+    <br>
+    <button type="submit" class="btn btn btn-light">Submit</button>
+{% endblock %}
